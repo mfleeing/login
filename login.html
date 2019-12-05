@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            text-align: center;
+            height: 60px;
+            line-height: 60px;
+        }
+        
+        .box {
+            width: 400px;
+            height: 300px;
+            border: 1px black solid;
+            margin: 0 auto;
+            background: skyblue;
+        }
+        
+        .box .form1 h2 {
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background: orangered;
+            border-bottom: 1px solid black;
+            margin-bottom: 20px;
+        }
+        
+        .box .form1 {
+            width: 400px;
+            text-align: center;
+        }
+        
+        .box .form1 p {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .box .form1 input {
+            width: 250px;
+            height: 33px;
+        }
+        
+        .box .form1 #button {
+            display: block;
+            width: 80px;
+            height: 30px;
+            background: orangered;
+            margin: auto;
+        }
+        
+        .box .form2 {
+            display: none;
+        }
+        
+        .box .form1 .yzm svg {
+            vertical-align: middle;
+        }
+        
+        .box .form1 .yzm input {
+            width: 156px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <p class="header"><button onclick="login()">登录</button> <button onclick="zhuce()">注册</button></p>
+    <div class="box">
+        <div class="form1   form2" id="zhuce">
+            <h2>注册界面</h2>
+            <p> 账号: <input type="text" placeholder="请输入用户名/账号" name="name" id="text2"></p>
+            <p> 密码: <input type="password" placeholder="请输入密码" name="passw" id="password2"> </p>
+            <p> 昵称: <input type="text" placeholder="请输入昵称" name="nc" id="nc2"></p>
+            <p> <input type="button" id="button" value="注册" onclick="UserReg()"></p>
+        </div>
+
+        <div class="form1" id="login">
+            <h2>登录界面</h2>
+            <p> 账号: <input type="text" placeholder="请输入用户名/账号" name="name" id="text"></p>
+            <p> 密码: <input type="password" placeholder="请输入密码" name="passw" id="password"> </p>
+            <p class="yzm"> <span> 验证码: <input type="text" placeholder="请输入验证码" name="yzm" id="yzm"></span> <span id="yzmurl" onclick="yzm()"></span> </p>
+            <p> <input type="button" id="button" value="登录" onclick="logins()"></p>
+        </div>
+    </div>
+    <div id="mydiv"></div>
+
+    <script type="text/javascript">
+        //页面加载完毕,把验证码请求路径,传到goto函数,进行ajax请求
+        window.onload = yzm;
+
+        function yzm() {
+            urls = "/yzm";
+            goto(urls);
+        }
+
+        //点击注册按钮,获取文本框内容,把注册请求路径,传到goto函数,进行ajax请求
+        function UserReg() {
+            let name = document.getElementById("text2").value.replace(/\s+/g, ""),
+                password = document.getElementById("password2").value.replace(/\s+/g, ""),
+                nc = document.getElementById("nc2").value.replace(/\s+/g, ""),
+                urls = "/register?name=" + name + "&password=" + password + "&nc=" + nc + "";
+            goto(urls);
+        }
+
+        //点击登录按钮,获取文本框内容,把登录请求路径,传到goto函数,进行ajax请求
+        function logins() {
+            let name = document.getElementById("text").value.replace(/\s+/g, ""),
+                password = document.getElementById("password").value.replace(/\s+/g, ""),
+                yzm = document.getElementById("yzm").value.replace(/\s+/g, ""),
+                urls = "/login?name=" + name + "&password=" + password + "" + "&yzm=" + yzm + "";
+            goto(urls);
+        }
+
+        //发送ajax请求
+        function goto(url) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    if (url == "/yzm") {
+                        document.getElementById("yzmurl").innerHTML = xmlhttp.responseText;
+                    } else {
+                        document.getElementById("mydiv").innerHTML = xmlhttp.responseText;
+                    }
+
+                }
+            }
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+
+        function zhuce() {
+            var zhuce = document.getElementById("zhuce"),
+                login = document.getElementById('login');
+            zhuce.style.display = 'block';
+            login.style.display = 'none';;
+        }
+
+        function login() {
+            var zhuce = document.getElementById("zhuce"),
+                login = document.getElementById('login');
+            login.style.display = 'block';
+            zhuce.style.display = 'none';;
+        }
+    </script>
+</body>
+
+</html>
